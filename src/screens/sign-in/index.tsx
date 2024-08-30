@@ -1,15 +1,17 @@
-import { StatusBar } from 'expo-status-bar'
-import { Text, View } from 'react-native'
+import backgroundImg from '@/assets/background.png'
+import { Button } from '@/components/Button'
 
-import { styles } from './styles'
+import { Container, Slogan, Title } from './styles'
 
 export interface SignInProps {}
 
 export function SignIn() {
   return (
-    <View style={styles.container}>
-      <Text>Test your skills!!!!!!!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Container source={backgroundImg}>
+      <Title>Ignite Fleet</Title>
+      <Slogan>Gestão de uso de veículos</Slogan>
+
+      <Button title="Entrar com Google" />
+    </Container>
   )
 }
