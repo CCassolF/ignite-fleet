@@ -1,8 +1,7 @@
-import { Text } from 'react-native'
-
 import { Header } from '@/components/header'
+import { LicensePlateInput } from '@/components/license-plate-input'
 
-import { Container } from './styles'
+import { Container, Content } from './styles'
 
 export interface DepartureProps {}
 
@@ -10,7 +9,10 @@ export function Departure() {
   return (
     <Container>
       <Header title="Saída" />
-      <Text>Departure</Text>
+
+      <Content>
+        <LicensePlateInput label="Placa do veículo" placeholder="BRA-1234" />
+      </Content>
     </Container>
   )
 }
