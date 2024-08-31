@@ -4,7 +4,7 @@ import {
   Roboto_700Bold,
   useFonts,
 } from '@expo-google-fonts/roboto'
-import { AppProvider, UserProvider } from '@realm/react'
+import { AppProvider, RealmProvider, UserProvider } from '@realm/react'
 import { StatusBar } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components/native'
@@ -32,7 +32,9 @@ export default function App() {
             translucent
           />
           <UserProvider fallback={SignIn}>
-            <Routes />
+            <RealmProvider>
+              <Routes />
+            </RealmProvider>
           </UserProvider>
         </SafeAreaProvider>
       </ThemeProvider>
