@@ -8,7 +8,7 @@ import { AppProvider, UserProvider } from '@realm/react'
 import { StatusBar } from 'react-native'
 import { ThemeProvider } from 'styled-components/native'
 
-import { Loading } from '@/components/Loading'
+import { Loading } from '@/components/loading'
 import { Home } from '@/screens/home'
 
 import { SignIn } from './src/screens/sign-in'

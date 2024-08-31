@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Alert } from 'react-native'
 
 import backgroundImg from '@/assets/background.png'
-import { Button } from '@/components/Button'
+import { Button } from '@/components/button'
 
 import { Container, Slogan, Title } from './styles'
 
