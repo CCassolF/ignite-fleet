@@ -1,5 +1,6 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -10,6 +11,7 @@ import { Button } from '@/components/button'
 import { Header } from '@/components/header'
 import { LicensePlateInput } from '@/components/license-plate-input'
 import { TextareaInput } from '@/components/textarea-input'
+import { licensePlateValidate } from '@/utils/license-plate-validate'
 
 import { Container, Content } from './styles'
 
@@ -19,10 +21,20 @@ const keyboardAvoidingViewBehavior =
   Platform.OS === 'android' ? 'height' : 'position'
 
 export function Departure() {
+  const [description, setDescription] = useState('')
+  const [licensePlate, setLicensePlate] = useState('')
+
   const descriptionRef = useRef<TextInput>(null)
+  const licensePlateRef = useRef<TextInput>(null)
 
   function handleDepartureRegister() {
-    console.log('Ok!')
+    if (!licensePlateValidate(licensePlate)) {
+      licensePlateRef.current?.focus()
+      return Alert.alert(
+        'Placa inválida',
+        'A placa é inválida. Por favor, informe a placa correta do veículo.',
+      )
+    }
   }
 
   return (
@@ -36,10 +48,12 @@ export function Departure() {
         <ScrollView>
           <Content>
             <LicensePlateInput
+              ref={licensePlateRef}
               label="Placa do veículo"
-              placeholder="BRA-1234"
+              placeholder="BRA 1234"
               onSubmitEditing={() => descriptionRef.current?.focus()}
               returnKeyType="next"
+              onChangeText={(text) => setLicensePlate(text)}
             />
             <TextareaInput
               ref={descriptionRef}
@@ -48,6 +62,7 @@ export function Departure() {
               onSubmitEditing={handleDepartureRegister}
               returnKeyType="send"
               blurOnSubmit
+              onChangeText={(text) => setDescription(text)}
             />
 
             <Button title="Registrar Saída" onPress={handleDepartureRegister} />
