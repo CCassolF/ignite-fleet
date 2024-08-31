@@ -1,14 +1,16 @@
-import { Text } from 'react-native'
-
+import { CarStatus } from '@/components/car-status'
 import { HomeHeader } from '@/components/home-header'
 
-import { Container } from './styles'
+import { Container, Content } from './styles'
 
 export function Home() {
   return (
     <Container>
       <HomeHeader />
-      <Text>Home</Text>
+
+      <Content>
+        <CarStatus />
+      </Content>
     </Container>
   )
 }
