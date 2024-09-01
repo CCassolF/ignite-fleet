@@ -6,8 +6,8 @@ interface HistoricSchemaProps {
   license_plate: string
   description: string
   status: string
-  created_at: string
-  updated_at: string
+  created_at: Date
+  updated_at: Date
 }
 
 interface GenerateProps {
@@ -40,8 +40,8 @@ export class Historic extends Realm.Object<HistoricSchemaProps> {
   license_plate!: string
   description!: string
   status!: string
-  created_at!: string
-  updated_at!: string
+  created_at!: Date
+  updated_at!: Date
 
   static generate({ user_id, description, license_plate }: GenerateProps) {
     return {

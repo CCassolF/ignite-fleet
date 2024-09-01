@@ -38,6 +38,8 @@ export function Home() {
       }
     }
 
+    fetchVehicleInUse()
+
     realm.addListener('change', () => fetchVehicleInUse())
 
     return () => realm.removeListener('change', fetchVehicleInUse)
