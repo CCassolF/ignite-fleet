@@ -1,9 +1,12 @@
 import { useRoute } from '@react-navigation/native'
 import { X } from 'phosphor-react-native'
+import { BSON } from 'realm'
 
 import { Button } from '@/components/button'
 import { ButtonIcon } from '@/components/button-icon'
 import { Header } from '@/components/header'
+import { useObject } from '@/libs/realm'
+import { Historic } from '@/libs/realm/schemas/historic'
 
 import {
   Container,
@@ -22,21 +25,19 @@ export function Arrival() {
   const route = useRoute()
   const { id } = route.params as RouteParamsProps
 
+  const historic = useObject(Historic, new BSON.UUID(id) as unknown as string)
+
   return (
     <Container>
       <Header title="Chegada" />
       <Content>
         <Label>Placa do veículo</Label>
 
-        <LicensePlate>XXX0000</LicensePlate>
+        <LicensePlate>{historic?.license_plate}</LicensePlate>
 
         <Label>Finalidade</Label>
 
-        <Description>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro, atque
-          dolorem. Ipsa repellendus enim commodi aut eum at animi id in dolorum
-          eaque amet, fugit aperiam est cupiditate tempore nulla.
-        </Description>
+        <Description>{historic?.description}</Description>
 
         <Footer>
           <ButtonIcon icon={X} />
