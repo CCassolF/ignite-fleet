@@ -45,6 +45,18 @@ export function Home() {
     return () => realm.removeListener('change', fetchVehicleInUse)
   }, [historic, realm])
 
+  useEffect(() => {
+    function fetchHistoric() {
+      const response = historic.filtered(
+        "status = 'arrival' SORT(created_at DESC)",
+      )
+
+      console.log(response)
+    }
+
+    fetchHistoric()
+  }, [historic])
+
   return (
     <Container>
       <HomeHeader />
