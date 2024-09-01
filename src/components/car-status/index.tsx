@@ -13,7 +13,7 @@ export function CarStatus({ licensePlate = null, ...rest }: CarStatusProps) {
 
   const Icon = licensePlate ? Key : Car
   const message = licensePlate
-    ? `Veículo ${licensePlate} em uso. `
+    ? `Veículo ${licensePlate} em uso.`
     : `Nenhum veículo em uso.`
   const status = licensePlate ? 'chegada' : 'saída'
 

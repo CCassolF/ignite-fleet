@@ -1,15 +1,18 @@
+import 'react-native-get-random-values'
+
 import { REALM_APP_ID } from '@env'
 import {
   Roboto_400Regular,
   Roboto_700Bold,
   useFonts,
 } from '@expo-google-fonts/roboto'
-import { AppProvider, RealmProvider, UserProvider } from '@realm/react'
+import { AppProvider, UserProvider } from '@realm/react'
 import { StatusBar } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components/native'
 
 import { Loading } from '@/components/loading'
+import { RealmProvider } from '@/libs/realm'
 import { Routes } from '@/routes'
 
 import { SignIn } from './src/screens/sign-in'
