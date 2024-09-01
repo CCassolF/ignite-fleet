@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Alert } from 'react-native'
 
 import { CarStatus } from '@/components/car-status'
+import { HistoricCard } from '@/components/historic-card'
 import { HomeHeader } from '@/components/home-header'
 import { useQuery, useRealm } from '@/libs/realm'
 import { Historic } from '@/libs/realm/schemas/historic'
@@ -65,6 +66,10 @@ export function Home() {
         <CarStatus
           licensePlate={vehicleInUse?.license_plate}
           onPress={handleRegisterMovement}
+        />
+
+        <HistoricCard
+          data={{ created: '01/09', licensePlate: 'XXX1212', isSync: false }}
         />
       </Content>
     </Container>
