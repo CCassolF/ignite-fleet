@@ -30,6 +30,8 @@ export function Arrival() {
   const historic = useObject(Historic, new BSON.UUID(id) as unknown as string)
   const realm = useRealm()
 
+  const title = historic?.status === 'departure' ? 'Chegada' : 'Detalhes'
+
   function handleRemoveVehicleUsage() {
     Alert.alert('Cancelar', 'Cancelar a utilização do veículo?', [
       { text: 'Não', style: 'cancel' },
@@ -68,7 +70,7 @@ export function Arrival() {
 
   return (
     <Container>
-      <Header title="Chegada" />
+      <Header title={title} />
       <Content>
         <Label>Placa do veículo</Label>
 
@@ -78,10 +80,12 @@ export function Arrival() {
 
         <Description>{historic?.description}</Description>
 
-        <Footer>
-          <ButtonIcon icon={X} onPress={handleRemoveVehicleUsage} />
-          <Button title="Registrar chegada" onPress={handleArrivalRegister} />
-        </Footer>
+        {historic?.status === 'departure' && (
+          <Footer>
+            <ButtonIcon icon={X} onPress={handleRemoveVehicleUsage} />
+            <Button title="Registrar chegada" onPress={handleArrivalRegister} />
+          </Footer>
+        )}
       </Content>
     </Container>
   )
