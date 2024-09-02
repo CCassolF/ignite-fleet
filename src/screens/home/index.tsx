@@ -1,13 +1,18 @@
 import { useNavigation } from '@react-navigation/native'
 import { useUser } from '@realm/react'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Alert, FlatList } from 'react-native'
+import Toast from 'react-native-toast-message'
 import { Realm } from 'realm'
 
 import { CarStatus } from '@/components/car-status'
 import { HistoricCard, HistoricCardProps } from '@/components/historic-card'
 import { HomeHeader } from '@/components/home-header'
+import {
+  getLastAsyncTimestamp,
+  saveLastSyncTimestamp,
+} from '@/libs/async-storage/sync-storage'
 import { useQuery, useRealm } from '@/libs/realm'
 import { Historic } from '@/libs/realm/schemas/historic'
 
@@ -36,11 +41,48 @@ export function Home() {
     navigate('arrival', { id })
   }
 
-  function progressNotification(transferred: number, transferable: number) {
-    const percentage = (transferred / transferable) * 100
+  const fetchHistoric = useCallback(async () => {
+    try {
+      const response = historic.filtered(
+        "status = 'arrival' SORT(created_at DESC)",
+      )
 
-    console.log(percentage)
-  }
+      const lastSync = await getLastAsyncTimestamp()
+
+      const formattedHistoric = response.map((item) => {
+        return {
+          id: item._id.toString(),
+          licensePlate: item.license_plate,
+          isSync: lastSync > item.updated_at.getTime(),
+          created: dayjs(item.created_at).format(
+            '[Saída] DD/MM/YYYY [às] HH:mm',
+          ),
+        }
+      })
+
+      setVehicleHistoric(formattedHistoric)
+    } catch (error) {
+      console.log(error)
+      Alert.alert('Histórico', 'Não foi possível carregar o histórico.')
+    }
+  }, [historic])
+
+  const progressNotification = useCallback(
+    async (transferred: number, transferable: number) => {
+      const percentage = (transferred / transferable) * 100
+
+      if (percentage === 100) {
+        await saveLastSyncTimestamp()
+        fetchHistoric()
+
+        Toast.show({
+          type: 'info',
+          text1: 'Todos os dados estão sincronizados',
+        })
+      }
+    },
+    [fetchHistoric],
+  )
 
   useEffect(() => {
     function fetchVehicleInUse() {
@@ -68,32 +110,8 @@ export function Home() {
   }, [historic, realm])
 
   useEffect(() => {
-    function fetchHistoric() {
-      try {
-        const response = historic.filtered(
-          "status = 'arrival' SORT(created_at DESC)",
-        )
-
-        const formattedHistoric = response.map((item) => {
-          return {
-            id: item._id.toString(),
-            licensePlate: item.license_plate,
-            isSync: false,
-            created: dayjs(item.created_at).format(
-              '[Saída] DD/MM/YYYY [às] HH:mm',
-            ),
-          }
-        })
-
-        setVehicleHistoric(formattedHistoric)
-      } catch (error) {
-        console.log(error)
-        Alert.alert('Histórico', 'Não foi possível carregar o histórico.')
-      }
-    }
-
     fetchHistoric()
-  }, [historic])
+  }, [fetchHistoric])
 
   useEffect(() => {
     realm.subscriptions.update((mutableSubs, realm) => {
@@ -119,7 +137,7 @@ export function Home() {
     )
 
     return () => syncSession.removeProgressNotification(progressNotification)
-  }, [realm])
+  }, [realm, progressNotification])
 
   return (
     <Container>
