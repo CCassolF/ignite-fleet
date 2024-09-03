@@ -18,7 +18,7 @@
     "@realm/react": "^0.10.1",
     "dayjs": "^1.11.13",
     "expo": "~51.0.28",
-    "expo-font": "~12.0.9",
+    "expo-font": "~12.0.10",
     "expo-image": "~1.12.15",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
@@ -31,7 +31,8 @@
     "react-native-svg": "15.2.0",
     "react-native-toast-message": "^2.2.0",
     "realm": "^12.13.1",
-    "styled-components": "^5.3.9"
+    "styled-components": "^5.3.9",
+    "expo-location": "~17.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
