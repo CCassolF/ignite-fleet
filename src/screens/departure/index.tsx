@@ -100,8 +100,15 @@ export function Departure() {
           'Historic',
           Historic.generate({
             user_id: user.id,
-            description,
             license_plate: licensePlate.toUpperCase(),
+            description,
+            coords: [
+              {
+                latitude: currentCoords.latitude,
+                longitude: currentCoords.longitude,
+                timestamp: new Date().getTime(),
+              },
+            ],
           }),
         )
       })
