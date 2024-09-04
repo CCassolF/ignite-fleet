@@ -1,12 +1,15 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { X } from 'phosphor-react-native'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Alert } from 'react-native'
+import { LatLng } from 'react-native-maps'
 import { BSON } from 'realm'
 
 import { Button } from '@/components/button'
 import { ButtonIcon } from '@/components/button-icon'
 import { Header } from '@/components/header'
+import { Map } from '@/components/map'
+import { getStorageLocations } from '@/libs/async-storage/location-storage'
 import { getLastAsyncTimestamp } from '@/libs/async-storage/sync-storage'
 import { useObject, useRealm } from '@/libs/realm'
 import { Historic } from '@/libs/realm/schemas/historic'
@@ -28,6 +31,7 @@ interface RouteParamsProps {
 
 export function Arrival() {
   const [dataNotSynced, setDataNotSynced] = useState(false)
+  const [coordinates, setCoordinates] = useState<LatLng[]>([])
 
   const { goBack } = useNavigation()
   const route = useRoute()
@@ -76,19 +80,29 @@ export function Arrival() {
     }
   }
 
-  useEffect(() => {
+  const getLocationInfo = useCallback(async () => {
     if (!historic) {
       return
     }
 
-    getLastAsyncTimestamp().then((lastSync) =>
-      setDataNotSynced(historic.updated_at.getTime() > lastSync),
-    )
+    const lastSync = await getLastAsyncTimestamp()
+    const updatedAt = historic.updated_at.getTime()
+    setDataNotSynced(updatedAt > lastSync)
+
+    const locationsStorage = await getStorageLocations()
+    setCoordinates(locationsStorage)
   }, [historic])
+
+  useEffect(() => {
+    getLocationInfo()
+  }, [getLocationInfo])
 
   return (
     <Container>
       <Header title={title} />
+
+      {coordinates.length > 0 && <Map coordinates={coordinates} />}
+
       <Content>
         <Label>Placa do veículo</Label>
 
