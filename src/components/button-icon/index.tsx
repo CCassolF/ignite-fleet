@@ -4,10 +4,8 @@ import { useTheme } from 'styled-components/native'
 
 import { Container } from './styles'
 
-export type IconBoxProps = (props: IconProps) => JSX.Element
-
 export interface ButtonIconProps extends TouchableOpacityProps {
-  icon: IconBoxProps
+  icon: (props: IconProps) => JSX.Element
 }
 
 export function ButtonIcon({ icon: Icon, ...rest }: ButtonIconProps) {
