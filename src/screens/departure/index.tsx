@@ -27,6 +27,7 @@ import { Map } from '@/components/map'
 import { TextareaInput } from '@/components/textarea-input'
 import { useRealm } from '@/libs/realm'
 import { Historic } from '@/libs/realm/schemas/historic'
+import { startLocationTask } from '@/tasks/background-location-task'
 import { getAddressLocation } from '@/utils/get-address-location'
 import { licensePlateValidate } from '@/utils/license-plate-validate'
 
@@ -91,6 +92,8 @@ export function Departure() {
           'É necessário permitir que o App tenha acesso a localização em segundo plano. Acesse as configurações do dispositivo e habilite "Permitir o tempo todo".',
         )
       }
+
+      await startLocationTask()
 
       realm.write(() => {
         realm.create(
