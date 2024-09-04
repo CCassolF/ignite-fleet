@@ -6,6 +6,8 @@ import {
 } from 'expo-location'
 import * as TaskManager from 'expo-task-manager'
 
+import { saveStorageLocation } from '@/libs/async-storage/location-storage'
+
 export const BACKGROUND_TASK_NAME = 'location-tracking'
 
 interface Coords {
@@ -28,10 +30,14 @@ interface TaskManagerProps extends TaskManager.TaskManagerTaskBody {
 
 TaskManager.defineTask(
   BACKGROUND_TASK_NAME,
-  ({ data, error }: TaskManagerProps) => {
+  async ({ data, error }: TaskManagerProps) => {
     try {
       if (error) {
         throw error
+      }
+
+      if (!data) {
+        return
       }
 
       const { coords, timestamp } = data.locations[0]
@@ -42,9 +48,10 @@ TaskManager.defineTask(
         timestamp,
       }
 
-      console.log(currentLocation)
+      await saveStorageLocation(currentLocation)
     } catch (error) {
       console.log(error)
+      stopLocationTask()
     }
   },
 )
