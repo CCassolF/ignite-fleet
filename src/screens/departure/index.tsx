@@ -18,6 +18,7 @@ import {
 import { Button } from '@/components/button'
 import { Header } from '@/components/header'
 import { LicensePlateInput } from '@/components/license-plate-input'
+import { Loading } from '@/components/loading'
 import { TextareaInput } from '@/components/textarea-input'
 import { useRealm } from '@/libs/realm'
 import { Historic } from '@/libs/realm/schemas/historic'
@@ -33,6 +34,7 @@ export function Departure() {
   const [description, setDescription] = useState('')
   const [licensePlate, setLicensePlate] = useState('')
   const [isRegistering, setIsRegistering] = useState(false)
+  const [isLoadingLocation, setIsLoadingLocation] = useState(true)
 
   const [locationForegroundPermission, requestLocationForegroundPermission] =
     useForegroundPermissions()
@@ -102,13 +104,19 @@ export function Departure() {
         timeInterval: 1000,
       },
       (location) => {
-        getAddressLocation(location.coords).then((address) => {
-          console.log(address)
-        })
+        getAddressLocation(location.coords)
+          .then((address) => {
+            console.log(address)
+          })
+          .finally(() => setIsLoadingLocation(false))
       },
     ).then((response) => (subscription = response))
 
-    return () => subscription.remove()
+    return () => {
+      if (subscription) {
+        subscription.remove()
+      }
+    }
   }, [locationForegroundPermission])
 
   if (!locationForegroundPermission?.granted) {
@@ -122,6 +130,10 @@ export function Departure() {
         </Message>
       </Container>
     )
+  }
+
+  if (isLoadingLocation) {
+    return <Loading />
   }
 
   return (
