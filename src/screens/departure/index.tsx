@@ -30,8 +30,9 @@ import { Historic } from '@/libs/realm/schemas/historic'
 import { startLocationTask } from '@/tasks/background-location-task'
 import { getAddressLocation } from '@/utils/get-address-location'
 import { licensePlateValidate } from '@/utils/license-plate-validate'
+import { openSettings } from '@/utils/open-settings'
 
-import { Container, Content, Message } from './styles'
+import { Container, Content, Message, MessageContent } from './styles'
 
 const keyboardAvoidingViewBehavior =
   Platform.OS === 'android' ? 'height' : 'position'
@@ -163,11 +164,16 @@ export function Departure() {
     return (
       <Container>
         <Header title="Saída" />
-        <Message>
-          Você precisa permitir que o aplicativo tenha acesso a localização para
-          utilizar essa funcionalidade. Por favor, acesse as configurações do
-          seu dispositivo para conceder essa permissão ao aplicativo.
-        </Message>
+        <MessageContent>
+          <Message>
+            Você precisa permitir que o aplicativo tenha acesso a localização
+            para utilizar essa funcionalidade. Por favor, acesse as
+            configurações do seu dispositivo para conceder essa permissão ao
+            aplicativo.
+          </Message>
+
+          <Button title="Abrir configurações" onPress={openSettings} />
+        </MessageContent>
       </Container>
     )
   }
