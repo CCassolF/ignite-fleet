@@ -10,10 +10,10 @@ interface LocationInfoProps {
 
 export interface LocationsProps {
   departure: LocationInfoProps
-  arrival: LocationInfoProps
+  arrival?: LocationInfoProps | null
 }
 
-export function Locations({ arrival, departure }: LocationsProps) {
+export function Locations({ arrival = null, departure }: LocationsProps) {
   return (
     <Container>
       <LocationInfo
@@ -22,13 +22,17 @@ export function Locations({ arrival, departure }: LocationsProps) {
         description={departure.description}
       />
 
-      <Line />
+      {arrival && (
+        <>
+          <Line />
 
-      <LocationInfo
-        icon={FlagCheckered}
-        label={arrival.label}
-        description={arrival.description}
-      />
+          <LocationInfo
+            icon={FlagCheckered}
+            label={arrival.label}
+            description={arrival.description}
+          />
+        </>
+      )}
     </Container>
   )
 }
