@@ -8,6 +8,7 @@ import { BSON } from 'realm'
 import { Button } from '@/components/button'
 import { ButtonIcon } from '@/components/button-icon'
 import { Header } from '@/components/header'
+import { Locations } from '@/components/locations'
 import { Map } from '@/components/map'
 import { getStorageLocations } from '@/libs/async-storage/location-storage'
 import { getLastAsyncTimestamp } from '@/libs/async-storage/sync-storage'
@@ -119,6 +120,11 @@ export function Arrival() {
       {coordinates.length > 0 && <Map coordinates={coordinates} />}
 
       <Content>
+        <Locations
+          departure={{ label: 'Saída', description: 'Saída teste' }}
+          arrival={{ label: 'Chegada', description: 'Chegada teste' }}
+        />
+
         <Label>Placa do veículo</Label>
 
         <LicensePlate>{historic?.license_plate}</LicensePlate>
