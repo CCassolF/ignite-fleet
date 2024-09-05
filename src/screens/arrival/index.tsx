@@ -9,6 +9,7 @@ import { BSON } from 'realm'
 import { Button } from '@/components/button'
 import { ButtonIcon } from '@/components/button-icon'
 import { Header } from '@/components/header'
+import { Loading } from '@/components/loading'
 import { Locations } from '@/components/locations'
 import { Map } from '@/components/map'
 import { getStorageLocations } from '@/libs/async-storage/location-storage'
@@ -42,6 +43,7 @@ export function Arrival() {
   const [coordinates, setCoordinates] = useState<LatLng[]>([])
   const [departure, setDeparture] = useState<LocationProps>({} as LocationProps)
   const [arrival, setArrival] = useState<LocationProps | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   const { goBack } = useNavigation()
   const route = useRoute()
@@ -138,11 +140,17 @@ export function Arrival() {
         ),
       })
     }
+
+    setIsLoading(false)
   }, [historic])
 
   useEffect(() => {
     getLocationInfo()
   }, [getLocationInfo])
+
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <Container>
